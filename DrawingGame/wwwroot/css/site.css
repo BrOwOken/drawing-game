@@ -69,3 +69,64 @@ body {
   white-space: nowrap;
   line-height: 60px; /* Vertically center the text there */
 }
+
+.main{
+  display: block;
+  width: 100%;
+  height: auto;
+  background-image: url('../assets/bg.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  min-height: calc(100vh - 117px);
+}
+.lobby {
+  padding-top: 64px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  width: 100%;
+  min-height: 800px;
+  gap: 16px 16px;
+  grid-template-areas:
+    "players players players drawarea drawarea drawarea drawarea drawarea drawarea drawarea drawarea"
+    "players players players drawarea drawarea drawarea drawarea drawarea drawarea drawarea drawarea"
+    "players players players chat chat chat chat chat chat chat chat";
+}
+.lobby-chat, .lobby-players, .lobby-drawarea{
+  background-color: white;
+  position: relative;
+  border-radius: 12px;
+  box-shadow: 2px 3px 7px 0px rgba(0,0,0,0.25);
+}
+.lobby-chat::before, .lobby-players::before, .lobby-drawarea::before{
+  padding: 4px 16px;
+  font-size: 16px;
+  font-weight: bold;
+  background-color: #762b85;
+  border-radius: 8px;
+  color: white;
+  position: absolute;
+  left: 32px;
+  top: -16px;
+}
+.lobby-chat::before{
+  content: "Chat";
+}
+.lobby-players::before{
+  content: "Players";
+}
+.lobby-drawarea::before{
+  content: "Drawing area";
+}
+.startBtn{
+  grid-column: 1 / span 12;
+}
+.lobby-players { grid-area: players; }
+.lobby-drawarea { grid-area: drawarea; }
+.lobby-chat { grid-area: chat; }
+#graphics{
+  height: 100%;
+  width: 100%;
+  border: 1px solid red;
+}

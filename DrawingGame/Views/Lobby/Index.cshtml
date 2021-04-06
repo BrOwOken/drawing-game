@@ -1,4 +1,27 @@
-﻿<div class="container" style=" height: 80vh;">
+﻿<div class="container">
+    <div class="lobby">
+        <div class="lobby-players">
+            <ul class="players">
+            </ul>
+        </div>
+        <div class="lobby-drawarea">
+            <canvas id="graphics"></canvas>
+        </div>
+        <div class="lobby-chat">
+            <div class="lobby-chat-area">
+                <ul class="chat">
+                </ul>
+            </div>
+            <div class="lobby-chat-form">
+                <input type="text" class="msg" name="chat" value="Make a guess" />
+                <button class="btn sendBtn">Send</button>
+            </div>
+        </div>
+        <button class="btn btn-primary startBtn" onclick="startGame()">Start the game</button>
+    </div>
+</div>
+
+@*<div class="container" style=" height: 80vh;">
     <div class="row" style=" height: 100%;">
         <div class="col-3" style=" flex-direction: column; border: 1px solid black; display: flex; padding: 0; position:relative;   max-height: calc(100vh - 140px);">
             <span style="height:30px; position:absolute; background-color:white;padding-left:20px">Seznam ucastniku</span>
@@ -20,7 +43,7 @@
             </div>
         </div>
     </div>
-</div>
+</div>*@
 <script src="~/lib/signalr/signalr.min.js"></script>
 <script>
     var nickName = prompt("Zadej nick name");
