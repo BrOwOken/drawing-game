@@ -48,7 +48,7 @@
 </div>*@
 <script src="~/lib/signalr/signalr.min.js"></script>
 <script>
-    var nickName = prompt("Zadej nick name");
+    var nickName = prompt("Enter your nickname");
 
     var connection = new signalR.HubConnectionBuilder()
         .configureLogging("trace")
@@ -121,6 +121,8 @@
             connection.invoke("sendLines", lines);
         });
         document.querySelector(".startBtn").setAttribute("disabled", "disabled");
+        document.querySelector(".sendBtn").setAttribute("disabled", "disabled")
+        document.querySelector(".msg").setAttribute("disabled", "disabled")
     });
     connection.on("chatMessage", function (msg) {
         var chat = document.querySelector(".chat");
@@ -137,6 +139,8 @@
     });
     connection.on("guess!", function () {
         document.querySelector(".startBtn").setAttribute("disabled", "disabled");
+        document.querySelector(".sendBtn").removeAttribute("disabled", "disabled")
+        document.querySelector(".msg").removeAttribute("disabled", "disabled")
     });
     connection.on("drawLines", function (lines) {
         var c = document.querySelector("#graphics");
@@ -150,6 +154,9 @@
         }
         ctx.stroke();
     });
+    connection.on("restart", function (users) {
+        refreshUsers(users);
+    })
     connection.start().then(t => {
         console.log("connected");
         connection.invoke("setProfile", nickName);
@@ -158,4 +165,7 @@
         });
         
     });
+    connection.on("clearChat", function () {
+        document.querySelector(".chat").innerHTML = ""
+    })
 </script>

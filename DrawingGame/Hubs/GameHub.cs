@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DrawingGame.Hubs
@@ -10,6 +11,8 @@ namespace DrawingGame.Hubs
     public class GameHub:Hub
     {
         static Dictionary<string, string> users = new Dictionary<string, string>();
+        static Dictionary<string, string> guessed = new Dictionary<string, string>();
+        static string drawer = string.Empty;
         public async Task SetProfile(string nickName)
         {
             lock (users)
@@ -36,7 +39,9 @@ namespace DrawingGame.Hubs
                 rand = r.Next(0, users.Keys.Count);
             }
             var connectionId = users.Keys.ToArray()[rand];
+            await this.Clients.All.SendAsync("clearChat");
             await this.Clients.Client(connectionId).SendAsync("draw!");
+            drawer = users[connectionId];
             lock (r)
             {
                 rand = r.Next(0, Things.Length);
@@ -51,17 +56,31 @@ namespace DrawingGame.Hubs
             ValidResponse.Add(NormalizedValidThing.ToLower());
             ValidResponse.Add(NormalizedValidThing.ToUpper());
 
-            await this.Clients.Client(connectionId).SendAsync("chatMessage", $"Nakresli {validThing}");
+            guessed = new Dictionary<string, string>();
+
+            await this.Clients.Client(connectionId).SendAsync("chatMessage", $"Draw {validThing}");
             await this.Clients.AllExcept(connectionId).SendAsync("guess!");
-            await this.Clients.AllExcept(connectionId).SendAsync("chatMessage", "Uhodnete co to je");
+            await this.Clients.AllExcept(connectionId).SendAsync("chatMessage", $"{drawer} is drawing!");
         }
         public async Task ProcessMessage(string msg)
         {
-            if (ValidResponse.Contains(msg))
+            if (ValidResponse.Contains(msg) && !guessed.ContainsKey(this.Context.ConnectionId))
             {
-                await this.Clients.Caller.SendAsync("chatMessage", "uhodl jsi");
-                await this.Clients.Others.SendAsync("chatMessage", $"{users[this.Context.ConnectionId]} uhodl co se kresli");
+                await this.Clients.Caller.SendAsync("chatMessage", "You guessed right!");
+                await this.Clients.Others.SendAsync("chatMessage", $"{users[this.Context.ConnectionId]} guessed right!");
+                guessed.Add(this.Context.ConnectionId, users[this.Context.ConnectionId]);
                 await this.Clients.All.SendAsync("guessed", $"{users[this.Context.ConnectionId]}");
+                if(guessed.Count >= users.Count - 1)
+                {
+                    await this.Clients.All.SendAsync("chatMessage", "Everyone guessed right! New game starts in 5 seconds.");
+                    Thread.Sleep(5000);
+                    await this.Clients.All.SendAsync("restart", users);
+                    await StartGame();
+                }
+            }
+            else if (ValidResponse.Contains(msg))
+            {
+                return;
             }
             else
             {
