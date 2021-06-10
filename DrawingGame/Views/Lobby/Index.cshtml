@@ -10,14 +10,17 @@
         <div class="lobby-chat">
             <div class="lobby-chat-area">
                 <ul class="chat">
+                    <li><b>Broken: </b>jedu parno uwu</li>
                 </ul>
             </div>
             <div class="lobby-chat-form">
-                <input type="text" class="msg" name="chat" value="Make a guess" />
-                <button class="btn sendBtn">Send</button>
+                <div class="input-group">
+                    <input type="text" class="form-control msg" placeholder="Text here">
+                    <button class="btn btn-outline-primary sendBtn" type="button">Send</button>
+                </div>
             </div>
         </div>
-        <button class="btn btn-primary startBtn" onclick="startGame()">Start the game</button>
+        <button class="btn btn-primary startBtn" style="box-sizing: border-box;" onclick="startGame()">Start the game</button>
     </div>
 </div>
 
@@ -60,7 +63,7 @@
     })
 
     function refreshUsers(users) {
-        var ul = document.querySelector(".users");
+        var ul = document.querySelector(".players");
         ul.innerHTML = "";
         for (var k in users) {
             var user = users[k];
