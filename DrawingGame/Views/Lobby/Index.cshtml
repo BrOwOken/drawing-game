@@ -67,7 +67,12 @@
         for (var k in users) {
             var user = users[k];
             var item = document.createElement("li");
-            item.innerText = user;
+            if (user == nickName) {
+                item.innerText = `${user} (You)`;
+            }
+            else{
+                item.innerText = user;
+            }
             ul.appendChild(item);
         }
     }
@@ -77,6 +82,14 @@
     connection.on("usersChanged", function (users) {
         refreshUsers(users);
     });
+    connection.on("guessed", function (user) {
+        var players = document.querySelector(".players")
+        for (let i = 0; i < players.childElementCount; i++) {
+            if (players.children[i].innerText == user || players.children[i].innerHTML == `${user} (You)`) {
+                players.children[i].style.color = "#00cc00"
+            }
+        }
+    })
     connection.on("draw!", function () {
         var c = document.querySelector("#graphics");
         var ctx = c.getContext("2d");
@@ -118,7 +131,7 @@
             li.innerHTML += str[1];
         }
         else {
-            li.innerHTML = `<p style="font-weight: bold; color: #6a0fab;">${msg}</p>`;
+            li.innerHTML = `<p style="font-weight: bold; color: #6a0fab; margin: 0;">${msg}</p>`;
         }
         chat.appendChild(li);
     });

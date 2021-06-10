@@ -61,6 +61,7 @@ namespace DrawingGame.Hubs
             {
                 await this.Clients.Caller.SendAsync("chatMessage", "uhodl jsi");
                 await this.Clients.Others.SendAsync("chatMessage", $"{users[this.Context.ConnectionId]} uhodl co se kresli");
+                await this.Clients.All.SendAsync("guessed", $"{users[this.Context.ConnectionId]}");
             }
             else
             {
