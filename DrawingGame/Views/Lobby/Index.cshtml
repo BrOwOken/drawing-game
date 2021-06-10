@@ -82,6 +82,11 @@
     connection.on("usersChanged", function (users) {
         refreshUsers(users);
     });
+    connection.on("clearCanvas", function () {
+        var c = document.querySelector("#graphics");
+        var ctx = c.getContext("2d");
+        ctx.clearRect(0, 0, c.width, c.height);
+    });
     connection.on("guessed", function (user) {
         var players = document.querySelector(".players")
         for (let i = 0; i < players.childElementCount; i++) {

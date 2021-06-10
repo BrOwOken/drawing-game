@@ -29,7 +29,7 @@ namespace DrawingGame.Hubs
             return users;
         }
         static Random r = new Random();
-        static string[] Things = new string[] { "Banán", "Jablko", "Kočárek", "Trumpetu" };
+        static string[] Things = new string[] { "apple", "phone", "cucumber", "walking", "music", "laptop", "beer", "tree", "face mask", "table", "tablet", "projector", "running", "mountain", "lake", "water", "person", "cute", "dog", "cat", "lynx", "bear" };
         static List<string> ValidResponse = new List<string>();
         public async Task StartGame()
         {
@@ -40,6 +40,7 @@ namespace DrawingGame.Hubs
             }
             var connectionId = users.Keys.ToArray()[rand];
             await this.Clients.All.SendAsync("clearChat");
+            await this.Clients.All.SendAsync("clearCanvas");
             await this.Clients.Client(connectionId).SendAsync("draw!");
             drawer = users[connectionId];
             lock (r)
