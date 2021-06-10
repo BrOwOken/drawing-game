@@ -5,12 +5,11 @@
             </ul>
         </div>
         <div class="lobby-drawarea">
-            <canvas id="graphics"></canvas>
+            <canvas height="420" width="790" id="graphics"></canvas>
         </div>
         <div class="lobby-chat">
             <div class="lobby-chat-area">
                 <ul class="chat">
-                    <li><b>Broken: </b>jedu parno uwu</li>
                 </ul>
             </div>
             <div class="lobby-chat-form">
@@ -113,7 +112,14 @@
     connection.on("chatMessage", function (msg) {
         var chat = document.querySelector(".chat");
         var li = document.createElement("li");
-        li.innerText = msg;
+        if (msg.includes(":")) {
+            var str = msg.split(":")
+            li.innerHTML += `<b>${str[0]}</b>:`;
+            li.innerHTML += str[1];
+        }
+        else {
+            li.innerHTML = `<p style="font-weight: bold; color: #6a0fab;">${msg}</p>`;
+        }
         chat.appendChild(li);
     });
     connection.on("guess!", function () {
